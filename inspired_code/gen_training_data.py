@@ -110,8 +110,8 @@ if __name__ == "__main__":
     rel_path = "./image_generation/"
 
     file_path = rel_path+'data/dataset_training_aug.h5'
-    dev_range = np.arange(0, 2, dtype=int)
-    pkt_range = np.arange(0, 2, dtype=int)
+    dev_range = np.arange(0, 20, dtype=int)
+    pkt_range = np.arange(0, 1000, dtype=int)
     print("generate IQ data")
     LoadDatasetObj = IQSampleLoader(dataset_name='data', labelset_name='label')
     data, label = LoadDatasetObj.load_iq_samples(file_path, dev_range, pkt_range)
