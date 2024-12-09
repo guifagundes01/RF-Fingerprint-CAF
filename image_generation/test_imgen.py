@@ -15,7 +15,7 @@ import shutil
 np.arange(3)
 
 # Load dataset
-file_path = '/home/achille/documents/rf_fingerprint/image_generation/data/dataset_training_aug.h5'
+file_path = './image_generation/data/dataset_training_aug.h5'
 hdf = h5py.File(file_path, 'r')
 
 list(hdf.keys())
@@ -54,19 +54,19 @@ print(spectrogram.shape)
 spectrogram = np.fft.fftshift(spectrogram, axes=0)
 spectrogram_amplitude = np.log10(np.abs(spectrogram) ** 2)
 
-plt.figure(figsize=(8, 4))
-plt.title(f'Time-Frequency Spectrogram')
-plt.xlabel('Time')
-plt.ylabel('Frequency')
-plt.imshow(spectrogram_amplitude[:, :64], cmap='viridis', aspect='auto', origin='lower', norm='linear')
-plt.colorbar(label='Log Amplitude')
+# plt.figure(figsize=(8, 4))
+# plt.title(f'Time-Frequency Spectrogram')
+# plt.xlabel('Time')
+# plt.ylabel('Frequency')
+# plt.imshow(spectrogram_amplitude[:, :64], cmap='viridis', aspect='auto', origin='lower', norm='linear')
+# plt.colorbar(label='Log Amplitude')
 
 
 short_complex_signal = complex_signal[:8192]
 N = len(short_complex_signal)
 
 # Finding the right alpha
-taus = np.arange(-300, 200)
+taus = np.arange(0, 600)
 alphas = np.arange(-0.3, 0.3, 0.005)
 CAF = np.zeros((len(alphas), len(taus)), dtype=complex)
 for j in range(len(alphas)):
@@ -77,20 +77,20 @@ for j in range(len(alphas)):
 
 
 CAF_magnitudes = np.average(np.abs(CAF), axis=1) # at each alpha, calc power in the CAF
-plt.plot(alphas, CAF_magnitudes)
-plt.xlabel('Alpha')
-plt.ylabel('CAF Power')
+# plt.plot(alphas, CAF_magnitudes)
+# plt.xlabel('Alpha')
+# plt.ylabel('CAF Power')
 
 
 #suite
 np.argmax(CAF_magnitudes)
 CAF2=CAF.copy()
 CAF_magnitudes = np.average(np.abs(CAF2), axis=1) # at each alpha, calc power in the CAF
-plt.plot(alphas, CAF_magnitudes)
-plt.xlabel('Alpha')
-plt.ylabel('CAF Power')
+# plt.plot(alphas, CAF_magnitudes)
+# plt.xlabel('Alpha')
+# plt.ylabel('CAF Power')
 
-extent = (-300, 200, float(np.max(alphas)), float(np.min(alphas)))
+extent = (0, 600, float(np.max(alphas)), float(np.min(alphas)))
 plt.imshow(np.abs(CAF2), extent=extent, aspect='auto', vmax=np.max(np.abs(CAF2))/2)
 plt.colorbar(label='CAF (tau, alpha)')
 plt.title('CAF')

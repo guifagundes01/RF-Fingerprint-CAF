@@ -107,18 +107,18 @@ class ChannelIndSpectrogram():
 # %%
 # Usage example
 if __name__ == "__main__":
-    rel_path = "/home/achille/documents/rf_fingerprint/image_generation/"
+    rel_path = "./image_generation/"
 
     file_path = rel_path+'data/dataset_training_aug.h5'
-    dev_range = np.arange(0, 5, dtype=int)
-    pkt_range = np.arange(0, 100, dtype=int)
+    dev_range = np.arange(0, 2, dtype=int)
+    pkt_range = np.arange(0, 2, dtype=int)
     print("generate IQ data")
     LoadDatasetObj = IQSampleLoader(dataset_name='data', labelset_name='label')
     data, label = LoadDatasetObj.load_iq_samples(file_path, dev_range, pkt_range)
 
     # %%
 
-    taus = np.arange(-300, 300)
+    taus = np.arange(0, 600)
     alphas = np.arange(-0.3, 0.3, 0.005)
     N=len(data[0])
     pre_exp = np.zeros(N)

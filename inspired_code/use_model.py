@@ -64,8 +64,8 @@ def plot_confusion_matrix(X_test, y_test, model):
 
 # %%
 if __name__ == "__main__":
-    rel_path = "/home/achille/documents/rf_fingerprint/image_generation/"
-    data_channel_ind_spec = np.load(rel_path+"output_dat/data_channel_ind_spec2.dat", allow_pickle=True)
+    rel_path = "C:/Users/gfagu/OneDrive/Supelec/2A/Pole_Projet/rff/rf-fingerprinct-caf/image_generation/"
+    data_channel_ind_spec = np.load(rel_path+"output_dat/data_imgs_caf_abs_.dat", allow_pickle=True)
     label = np.load(rel_path+"output_dat/label2.dat", allow_pickle=True)
     print(data_channel_ind_spec)
     print(label)
