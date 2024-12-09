@@ -74,7 +74,7 @@ class ChannelIndSpectrogram():
 
         return s_norm
 
-    def _gen_single_channel_ind_spectrogram(self, sig):
+    def _gen_single_channel_CAF(self, sig):
     
         # Finding the right alpha
         CAF = np.zeros((len(alphas), len(taus)), dtype=complex)
@@ -84,12 +84,12 @@ class ChannelIndSpectrogram():
                             np.conj(np.roll(sig, taus[i])) *
                             pre_exp[j])
                 
-        CAF2=CAF.copy()
-        CAF2[60] = 0
+        #CAF2=CAF.copy()
+        #CAF2[60] = 0
 
-        return np.abs(CAF2)
+        return np.abs(CAF)
 
-    def channel_ind_spectrogram(self, data):
+    def channel_ind_CAF(self, data):
         '''Converts the data to channel-independent spectrograms.'''
         data = self._normalization(data)
         num_sample = data.shape[0]
@@ -98,7 +98,7 @@ class ChannelIndSpectrogram():
         data_channel_ind_spec = np.zeros([num_sample, num_row, num_column, 1])
 
         for i in range(num_sample):
-            chan_ind_spec_amp = self._gen_single_channel_ind_spectrogram(data[i])
+            chan_ind_spec_amp = self._gen_single_channel_CAF(data[i])
             data_channel_ind_spec[i, :, :, 0] = chan_ind_spec_amp
 
         return data_channel_ind_spec
@@ -127,7 +127,7 @@ if __name__ == "__main__":
     print("generate training data")
     ch = ChannelIndSpectrogram()
     t1=time.time()
-    data_channel_ind_spec = ch.channel_ind_spectrogram(data)
+    data_channel_ind_spec = ch.channel_ind_CAF(data)
     t2=time.time()
 
     #%%
@@ -135,7 +135,7 @@ if __name__ == "__main__":
     print("la génération a dure "+str(round(diff))+" secondes")
 
     #%%
-    data_channel_ind_spec.dump(rel_path+"output_dat/data_channel_ind_spec2.dat")
+    data_channel_ind_spec.dump(rel_path+"output_dat/data_imgs_caf_abs_.dat")
     label.dump(rel_path+"output_dat/label2.dat")
 
 # %%
