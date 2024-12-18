@@ -211,7 +211,9 @@ if __name__ == "__main__":
     ch = ChannelIndSpectrogram()
     data_channel_ind_spec = ch.channel_ind_spectrogram(data)
 
-    X_train, X_val, y_train, y_val = train_test_split(data_channel_ind_spec, label, test_size=0.4, random_state=42,stratify=label)
+    X_train, X_test, y_train, y_test = train_test_split(data_channel_ind_spec, label, test_size=0.2, random_state=42,stratify=label)
+
+    X_train, X_val, y_train, y_val  = train_test_split(X_train, y_train, test_size=0.25, random_state=1)
 
     input_shape = (data_channel_ind_spec.shape[1], data_channel_ind_spec.shape[2], 1)
     
@@ -238,6 +240,11 @@ if __name__ == "__main__":
     # Evaluate the model on the validation data
     val_loss, val_accuracy = model.evaluate(X_val, y_val)
     print("Validation Accuracy:", val_accuracy)
+    plot_results(history)
+
+    # Evaluate the model on the test data
+    test_loss, test_accuracy = model.evaluate(X_test, y_test)
+    print("Test Accuracy:", test_accuracy)
     plot_results(history)
 
 # Confusion Matrix
