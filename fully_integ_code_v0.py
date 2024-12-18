@@ -200,7 +200,7 @@ def plot_confusion_matrix(X_test, y_test, model):
 
 # Usage example
 if __name__ == "__main__":
-    file_path = '/home/achille/documents/rf_fingerprint/image_generation/data/dataset_training_aug.h5'
+    file_path = './image_generation/data/dataset_training_aug.h5'    
     dev_range = np.arange(0, 20, dtype=int)
     pkt_range = np.arange(0, 1000, dtype=int)
     print("generate IQ data")
