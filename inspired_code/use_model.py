@@ -2,6 +2,7 @@
 import numpy as np
 import cnn_model
 import matplotlib.pyplot as plt
+import pickle
 from keras import models
 from keras import optimizers
 from keras import callbacks
@@ -64,17 +65,29 @@ def plot_confusion_matrix(X_test, y_test, model):
 
 # %%
 if __name__ == "__main__":
-    rel_path = "C:/Users/gfagu/OneDrive/Supelec/2A/Pole_Projet/rff/rf-fingerprinct-caf/image_generation/"
-    data_channel_ind_spec = np.load(rel_path+"output_dat/data_imgs_caf_abs_.dat", allow_pickle=True)
-    label = np.load(rel_path+"output_dat/label2.dat", allow_pickle=True)
-    print(data_channel_ind_spec)
-    print(label)
-    X_train, X_val, y_train, y_val = train_test_split(data_channel_ind_spec, label, test_size=0.4, random_state=42,stratify=label)
+    # rel_path = ""
+    # data_channel_ind_spec = np.load(rel_path+"output_dat/data_imgs_caf_abs_.dat", allow_pickle=True)
+    # label = np.load(rel_path+"output_dat/label2.dat", allow_pickle=True)
+    rel_path = "../image_generation/"
+
+    data_channel_ind_spec = np.load(rel_path+"output_dat/data_imgs_caf_abs/device0.dat", allow_pickle=True)
+    label = np.load(rel_path+"output_dat/data_imgs_caf_abs/label0.dat", allow_pickle=True)
+
+    for i in range(1,15):
+        print("gathering datas, device "+str(i))
+        data_channel_ind_spec_add = np.load(rel_path+"output_dat/data_imgs_caf_abs/device"+str(i)+".dat", allow_pickle=True)
+        label_add = np.load(rel_path+"output_dat/data_imgs_caf_abs/label"+str(i)+".dat", allow_pickle=True)
+        data_channel_ind_spec = np.concatenate((data_channel_ind_spec, data_channel_ind_spec_add))
+        label = np.concatenate((label, label_add))
+
+    X_train, X_test, y_train, y_test = train_test_split(data_channel_ind_spec, label, test_size=0.2, random_state=42,stratify=label)
+
+    X_train, X_val, y_train, y_val  = train_test_split(X_train, y_train, test_size=0.25, random_state=1)
 
     input_shape = (data_channel_ind_spec.shape[1], data_channel_ind_spec.shape[2], 1)
-    
+    # %%
     # Define the model
-    model = cnn_model.create_model(input_shape, 20)
+    model = cnn_model.create_model(input_shape, 15)
 
     # Set optimizer and initial learning rate
     optimizer = optimizers.Adam(learning_rate=0.0003)
@@ -84,7 +97,7 @@ if __name__ == "__main__":
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
     
-    early_stopping = callbacks.EarlyStopping(monitor='val_loss', patience=15, restore_best_weights=True)
+    early_stopping = callbacks.EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
     lr_scheduler = callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.3, patience=10, verbose=1, min_lr=1e-6)
     # Print model summary
     model.summary()
@@ -100,7 +113,23 @@ if __name__ == "__main__":
     print("Validation Accuracy:", val_accuracy)
     plot_results(history)
 
-# Confusion Matrix
+    test_loss, test_accuracy = model.evaluate(X_test, y_test)
+    print("Test Accuracy:", test_accuracy)
+
+    # Save the model
+    model.save("../model/models/model_15_devices/model.h5")
+
+    # Save history
+    with open('../model/models/model_15_devices/history.pkl', 'wb') as f:
+        pickle.dump(history.history, f)
+
+    # Confusion Matrix
     plot_confusion_matrix(X_val, y_val, model)
-    x=models.load_model()
+    
 # %%
+    # # Load model
+    # x=models.load_model("../model/models/model_15_devices/model.h5")
+
+    # # Load history
+    # with open('../model/models/model_15_devices/history.pkl', 'rb') as f:
+    #     loaded_history = pickle.load(f)

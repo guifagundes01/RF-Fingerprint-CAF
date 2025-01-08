@@ -1,4 +1,4 @@
 *.dat
-*.h5
+image_generation/data/
 myenv
 *:Zone.Identifier
