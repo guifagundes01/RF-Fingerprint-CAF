@@ -1,1 +1,1 @@
-This project implements a robust Radio Frequency (RF) fingerprinting system to uniquely identify IoT devices and detect unauthorized access attempts. By leveraging cyclostationary signal processing and deep learning, we overcome achieve 99.1% accuracy in device authentication.
+This project implements a robust Radio Frequency (RF) fingerprinting system to uniquely identify IoT devices and detect unauthorized access attempts. By leveraging cyclostationary signal processing and CNN models, we overcome achieve 99.1% accuracy in device authentication.
